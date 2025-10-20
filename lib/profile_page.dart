@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'edit_profile_page.dart';
 import 'settings_page.dart';
 import 'history_page.dart';
+import 'achievements_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -11,8 +12,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool receiveNotifications = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,22 +73,37 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
-              // Receive Notifications
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("Receive Notifications"),
-                  Switch(
-                    value: receiveNotifications,
-                    onChanged: (val) {
-                      setState(() {
-                        receiveNotifications = val;
-                      });
-                    },
+              // Achievements Section
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AchievementsPage()),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.amber[100],
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                ],
+                  child: Row(
+                    children: const [
+                      Icon(Icons.emoji_events, color: Colors.orange, size: 30),
+                      SizedBox(width: 12),
+                      Text(
+                        "View Achievements",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
 
               const SizedBox(height: 30),

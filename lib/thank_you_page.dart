@@ -3,6 +3,8 @@ import 'package:voting_app/feedback_page.dart';
 import 'package:voting_app/share_movie_page.dart';
 import 'package:voting_app/view_results_page.dart';
 import 'home_page.dart';
+import 'movie_vote_page.dart';
+import 'invite_friend_page.dart';
 
 class ThankYouPage extends StatelessWidget {
   const ThankYouPage({super.key});
@@ -50,16 +52,25 @@ class ThankYouPage extends StatelessWidget {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const MovieVotePage()),
+                  );
                 },
                 child: const Text("Vote Again"),
               ),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -94,7 +105,12 @@ class ThankYouPage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // TODO: Implement Invite Friends
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const InviteFriendPage(),
+                      ),
+                    );
                   },
                   child: Column(
                     children: const [

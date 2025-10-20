@@ -3,6 +3,8 @@ import 'search_page.dart';
 import 'saved_page.dart';
 import 'profile_page.dart';
 import 'movie_vote_page.dart';
+import 'invite_friend_page.dart';
+import 'notifications_page.dart';
 
 // Import halaman kategori
 import 'politics_page.dart';
@@ -21,7 +23,12 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   int selectedIndex = 0;
-  final pages = const [HomeContent(), SearchPage(), SavedPage(), ProfilePage()];
+  final pages = const [
+    HomeContent(),
+    SearchPage(),
+    SavedPage(),
+    ProfilePage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +50,8 @@ class HomePageState extends State<HomePage> {
   }
 }
 
-class HomeContent extends StatefulWidget {
+class HomeContent extends StatelessWidget {
   const HomeContent({super.key});
-
-  @override
-  State<HomeContent> createState() => _HomeContentState();
-}
-
-class _HomeContentState extends State<HomeContent> {
-  bool notificationsEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +62,40 @@ class _HomeContentState extends State<HomeContent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Header greeting + profile + notif icon
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: const [
+                      CircleAvatar(
+                        backgroundImage: AssetImage('assets/images/imagespp.png'),
+                        radius: 20,
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Hi, Nichi 👋",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'PTSerif',
+                        ),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.notifications),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const NotificationPage()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
               const Text(
                 "Vote Now",
                 style: TextStyle(
@@ -72,59 +106,62 @@ class _HomeContentState extends State<HomeContent> {
               ),
               const SizedBox(height: 16),
 
-              // Search Bar
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.search, color: Colors.grey),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Search polls",
-                          style: TextStyle(
-                            fontFamily: 'PTSerif',
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w500,
-                          ),
+              // Search Bar 
+              GestureDetector(
+                onTap: () {
+                  final homeState = context.findAncestorStateOfType<HomePageState>();
+                  homeState?.setState(() {
+                    homeState.selectedIndex = 1; 
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.search, color: Colors.grey),
+                      SizedBox(width: 10),
+                      Text(
+                        "Search polls",
+                        style: TextStyle(
+                          fontFamily: 'PTSerif',
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
                         ),
-                        Text(
-                          "Add location and guests",
-                          style: TextStyle(
-                            fontFamily: 'PTSerif',
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
 
-              // Categories
+              const Text(
+                "Categories",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'PTSerif',
+                ),
+              ),
+              const SizedBox(height: 12),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: const [
-                    CategoryIcon(label: 'Politics', icon: Icons.account_balance, page: PoliticsPage()),
-                    SizedBox(width: 16),
-                    CategoryIcon(label: 'Entertainment', icon: Icons.movie, page: EntertainmentPage()),
-                    SizedBox(width: 16),
-                    CategoryIcon(label: 'TV Shows', icon: Icons.tv, page: TopTVShowsPage()),
-                    SizedBox(width: 16),
-                    CategoryIcon(label: 'Technology', icon: Icons.devices, page: TechnologyPage()),
-                    SizedBox(width: 16),
-                    CategoryIcon(label: 'Health', icon: Icons.health_and_safety, page: HealthPage()),
-                    SizedBox(width: 16),
-                    CategoryIcon(label: 'Education', icon: Icons.school, page: EducationPage()),
+                    CategoryChip(label: 'Politics', icon: Icons.account_balance, page: PoliticsPage(), color: Colors.blue),
+                    SizedBox(width: 8),
+                    CategoryChip(label: 'Entertainment', icon: Icons.movie, page: EntertainmentPage(), color: Colors.purple),
+                    SizedBox(width: 8),
+                    CategoryChip(label: 'TV Shows', icon: Icons.tv, page: TopTVShowsPage(), color: Colors.teal),
+                    SizedBox(width: 8),
+                    CategoryChip(label: 'Technology', icon: Icons.devices, page: TechnologyPage(), color: Colors.orange),
+                    SizedBox(width: 8),
+                    CategoryChip(label: 'Health', icon: Icons.health_and_safety, page: HealthPage(), color: Colors.green),
+                    SizedBox(width: 8),
+                    CategoryChip(label: 'Education', icon: Icons.school, page: EducationPage(), color: Colors.redAccent),
                   ],
                 ),
               ),
@@ -141,7 +178,7 @@ class _HomeContentState extends State<HomeContent> {
               ),
               const SizedBox(height: 12),
               SizedBox(
-                height: 180,
+                height: 200,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
@@ -149,6 +186,8 @@ class _HomeContentState extends State<HomeContent> {
                       image: 'assets/images/images.jpg',
                       title: "Best Movie 2023",
                       subtitle: "Vote for your favorite",
+                      voters: 320,
+                      isPopular: true,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -156,61 +195,36 @@ class _HomeContentState extends State<HomeContent> {
                         );
                       },
                     ),
-                    PollCard(
+                    const PollCard(
                       image: 'assets/images/images1.jpg',
                       title: "Tech Innovations",
                       subtitle: "Choose the best",
+                      voters: 150,
+                      isPopular: false,
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 24),
 
-              // Notification Switch
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Receive notifications",
-                    style: TextStyle(fontFamily: 'PTSerif'),
+              // Invite Friends Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.person_add),
+                  label: const Text('Invite Friends', style: TextStyle(fontFamily: 'PTSerif')),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  Switch(
-                    value: notificationsEnabled,
-                    onChanged: (val) {
-                      setState(() {
-                        notificationsEnabled = val;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-
-              // User Info
-              Row(
-                children: [
-                  const CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/imagespp.png'),
-                    radius: 20,
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Nichi Putra Lin",
-                        style: TextStyle(
-                          fontFamily: 'PTSerif',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "Participated in 5 polls",
-                        style: TextStyle(fontFamily: 'PTSerif'),
-                      ),
-                    ],
-                  ),
-                ],
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const InviteFriendPage()),
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -220,32 +234,29 @@ class _HomeContentState extends State<HomeContent> {
   }
 }
 
-class CategoryIcon extends StatelessWidget {
+class CategoryChip extends StatelessWidget {
   final String label;
   final IconData icon;
   final Widget page;
+  final Color color;
 
-  const CategoryIcon({
+  const CategoryChip({
     required this.label,
     required this.icon,
     required this.page,
+    required this.color,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => page),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, size: 28),
-          const SizedBox(height: 4),
-          Text(label, style: const TextStyle(fontFamily: 'PTSerif')),
-        ],
-      ),
+    return ActionChip(
+      avatar: Icon(icon, color: Colors.white, size: 20),
+      label: Text(label, style: const TextStyle(color: Colors.white)),
+      backgroundColor: color,
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      },
     );
   }
 }
@@ -254,12 +265,16 @@ class PollCard extends StatefulWidget {
   final String image;
   final String title;
   final String subtitle;
+  final int voters;
+  final bool isPopular;
   final VoidCallback? onTap;
 
   const PollCard({
     required this.image,
     required this.title,
     required this.subtitle,
+    required this.voters,
+    required this.isPopular,
     this.onTap,
     super.key,
   });
@@ -299,6 +314,16 @@ class _PollCardState extends State<PollCard> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (widget.isPopular)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text('🔥 Popular', style: TextStyle(color: Colors.white, fontSize: 12)),
+                    ),
+                  const SizedBox(height: 4),
                   Text(
                     widget.title,
                     style: const TextStyle(
@@ -316,27 +341,36 @@ class _PollCardState extends State<PollCard> {
                       color: Colors.white70,
                     ),
                   ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${widget.voters} votes',
+                    style: const TextStyle(
+                      fontFamily: 'PTSerif',
+                      fontSize: 12,
+                      color: Colors.white70,
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
 
-          // Icon Save di kanan atas
+          // Icon save di kanan atas
           Positioned(
             top: 10,
             right: 20,
-            child: IconButton(
-              icon: Icon(
-                isSaved ? Icons.bookmark : Icons.bookmark_border,
-                color: Colors.white,
-                size: 28,
-              ),
-              onPressed: () {
+            child: GestureDetector(
+              onTap: () {
                 setState(() {
                   isSaved = !isSaved;
                 });
                 debugPrint('${widget.title} saved: $isSaved');
               },
+              child: Icon(
+                isSaved ? Icons.bookmark : Icons.bookmark_border,
+                color: Colors.white,
+                size: 28,
+              ),
             ),
           ),
         ],

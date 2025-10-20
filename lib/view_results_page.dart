@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'movie_vote_page.dart';
 
 class ViewResultsPage extends StatelessWidget {
   const ViewResultsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<String> movies = [
-      'Mean Girls',
-      'Inside Out 2',
-      'Garfield Movie',
-    ];
+    // Ambil data hasil voting dari backend simulasi
+    final Map<String, int> votesData = VoteBackend.getVotes();
 
-    final List<int> votes = [70, 50, 30];
+    // Jika belum ada vote, tampilkan default
+    final List<String> movies =
+        votesData.isNotEmpty
+            ? votesData.keys.toList()
+            : ['Mean Girls', 'Inside Out 2', 'Garfield Movie'];
 
-    final int totalVotes = votes.reduce((a, b) => a + b);
+    final List<int> votes =
+        votesData.isNotEmpty ? votesData.values.toList() : [70, 50, 30];
+
+    final int totalVotes = votes.isNotEmpty ? votes.reduce((a, b) => a + b) : 0;
 
     final List<Color> colors = [
       Colors.purple,
       Colors.deepPurple,
       Colors.indigo,
+      Colors.orange,
+      Colors.teal,
+      Colors.pinkAccent,
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Voting Results'),
-      ),
+      appBar: AppBar(title: const Text('Voting Results')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -49,11 +55,17 @@ class ViewResultsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
+
+            //  Grafik hasil voting
             Expanded(
               child: BarChart(
                 BarChartData(
                   alignment: BarChartAlignment.spaceEvenly,
-                  maxY: (votes.reduce((a, b) => a > b ? a : b)).toDouble() + 10,
+                  maxY:
+                      votes.isNotEmpty
+                          ? (votes.reduce((a, b) => a > b ? a : b)).toDouble() +
+                              10
+                          : 100,
                   barTouchData: BarTouchData(enabled: true),
                   titlesData: FlTitlesData(
                     leftTitles: AxisTitles(
@@ -68,8 +80,12 @@ class ViewResultsPage extends StatelessWidget {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
                   ),
                   gridData: FlGridData(show: true),
                   borderData: FlBorderData(show: false),
@@ -79,7 +95,7 @@ class ViewResultsPage extends StatelessWidget {
                       barRods: [
                         BarChartRodData(
                           toY: votes[index].toDouble(),
-                          color: colors[index],
+                          color: colors[index % colors.length],
                           width: 28,
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -89,12 +105,15 @@ class ViewResultsPage extends StatelessWidget {
                 ),
               ),
             ),
+
             const SizedBox(height: 16),
-            // Legend with vote count and percentage
+
+            //  Keterangan tiap film + jumlah vote
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: List.generate(movies.length, (index) {
-                double percent = (votes[index] / totalVotes) * 100;
+                double percent =
+                    totalVotes > 0 ? (votes[index] / totalVotes) * 100 : 0;
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Row(
@@ -102,19 +121,25 @@ class ViewResultsPage extends StatelessWidget {
                       Container(
                         width: 16,
                         height: 16,
-                        color: colors[index],
+                        color: colors[index % colors.length],
                       ),
                       const SizedBox(width: 8),
                       Text(
                         '${movies[index]} - ${votes[index]} votes (${percent.toStringAsFixed(1)}%)',
-                        style: const TextStyle(fontSize: 16, fontFamily: 'PTSerif'),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'PTSerif',
+                        ),
                       ),
                     ],
                   ),
                 );
               }),
             ),
+
             const SizedBox(height: 24),
+
+            // Tombol kembali
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -122,7 +147,7 @@ class ViewResultsPage extends StatelessWidget {
                 },
                 child: const Text('Back'),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -34,11 +34,12 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   fl_chart: ^0.66.0
   provider: ^6.1.1
+  shared_preferences: ^2.2.2
+  share_plus: ^7.2.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   
-
 # fonts:
 #   - family: PTSerif
 #     fonts:
@@ -93,6 +94,8 @@ flutter:
     - assets/images/kraven.png
     - assets/images/immaculate.png
     - assets/images/land_of_bad.png
+    - assets/images/vote_box.png
+    - assets/images/power_to_the_polls.png
 
   fonts:
     - family: PTSerif

@@ -7,6 +7,8 @@ import 'account_settings_page.dart';
 import 'about_us_page.dart';
 import 'faqs_page.dart';
 import 'feedback_page.dart';
+import 'notifications_page.dart';
+import 'language_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -48,14 +50,29 @@ class SettingsPage extends StatelessWidget {
               );
             },
           ),
-          const ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text('Notification'),
+          ListTile(
+            leading: const Icon(Icons.notifications),
+            title: const Text('Notification'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationPage(),
+                ),
+              );
+            },
           ),
-          const ListTile(
-            leading: Icon(Icons.language),
-            title: Text('Language'),
+          ListTile(
+            leading: const Icon(Icons.language),
+            title: const Text('Language'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LanguagePage()),
+              );
+            },
           ),
+
           ListTile(
             leading: const Icon(Icons.help_outline),
             title: const Text('Help & Support'),
@@ -74,9 +91,7 @@ class SettingsPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const AboutUsPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const AboutUsPage()),
               );
             },
           ),

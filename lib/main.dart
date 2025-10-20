@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'theme_provider.dart';
-import 'signup_page.dart';
+import 'splash_screen.dart'; 
 
 void main() {
   runApp(
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blueGrey,
       ),
-      home: const SignUpPage(),
+      home: const SplashScreen(), // mulai dari splashscreen
     );
   }
 }

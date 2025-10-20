@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:voting_app/thank_you_page.dart';
+import 'thank_you_page.dart';
 import 'share_movie_page.dart';
+import 'movie_vote_page.dart';
 
 class MovieDetailPage extends StatelessWidget {
   final String title;
@@ -80,6 +81,7 @@ class MovieDetailPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
                   onPressed: () {
+                    VoteBackend.addVote(title); // vote dihitung sekali
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -89,7 +91,8 @@ class MovieDetailPage extends StatelessWidget {
                   },
                   child: const Text(
                     "Vote",
-                    style: TextStyle(color: Colors.white),),
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(

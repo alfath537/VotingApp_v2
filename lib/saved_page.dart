@@ -1,6 +1,25 @@
 import 'package:flutter/material.dart';
 import 'movie_vote_page.dart';
 
+/// Backend simulasi untuk saved polls
+class SavedBackend {
+  static final Map<String, bool> _savedStatus = {
+    "Best Movie 2023": true,
+    "Tech Innovations": true,
+    "Health Tips": true,
+    "Top TV Shows": false,
+    "Favorite Tech Brand": false,
+  };
+
+  static bool isSaved(String title) => _savedStatus[title] ?? false;
+
+  static void toggleSaved(String title) {
+    _savedStatus[title] = !(_savedStatus[title] ?? false);
+  }
+
+  static Map<String, bool> getAllSaved() => _savedStatus;
+}
+
 class SavedPage extends StatefulWidget {
   const SavedPage({super.key});
 
@@ -10,15 +29,6 @@ class SavedPage extends StatefulWidget {
 
 class _SavedPageState extends State<SavedPage> {
   final TextEditingController searchController = TextEditingController();
-
-  // Simulasi status tersimpan: Map berisi title dan status saved
-  final Map<String, bool> savedStatus = {
-    "Best Movie 2023": true,
-    "Tech Innovations": true,
-    "Health Tips": true,
-    "Top TV Shows": false,
-    "Favorite Tech Brand": false,
-  };
 
   List<Map<String, dynamic>> allItems = [];
   List<Map<String, dynamic>> filteredItems = [];
@@ -73,7 +83,7 @@ class _SavedPageState extends State<SavedPage> {
 
   void toggleSave(String title) {
     setState(() {
-      savedStatus[title] = !(savedStatus[title] ?? false);
+      SavedBackend.toggleSaved(title);
     });
   }
 
@@ -108,8 +118,6 @@ class _SavedPageState extends State<SavedPage> {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Search Bar
               TextField(
                 controller: searchController,
                 decoration: InputDecoration(
@@ -129,7 +137,6 @@ class _SavedPageState extends State<SavedPage> {
                 ),
               ),
               const SizedBox(height: 20),
-
               if (saved.isNotEmpty)
                 const Text(
                   "Saved",
@@ -140,7 +147,6 @@ class _SavedPageState extends State<SavedPage> {
                   ),
                 ),
               const SizedBox(height: 10),
-
               Expanded(
                 child: ListView(
                   children: [
@@ -148,7 +154,7 @@ class _SavedPageState extends State<SavedPage> {
                           image: item['image'],
                           title: item['title'],
                           subtitle: item['subtitle'],
-                          saved: savedStatus[item['title']] ?? false,
+                          saved: SavedBackend.isSaved(item['title']),
                           onTap: item['title'] == "Best Movie 2023"
                               ? () {
                                   Navigator.push(
@@ -162,7 +168,6 @@ class _SavedPageState extends State<SavedPage> {
                           onSaveToggle: () => toggleSave(item['title']),
                         )),
                     const SizedBox(height: 30),
-
                     if (recent.isNotEmpty)
                       const Text(
                         "Recent Votes",
@@ -177,7 +182,7 @@ class _SavedPageState extends State<SavedPage> {
                           image: item['image'],
                           title: item['title'],
                           subtitle: item['subtitle'],
-                          saved: savedStatus[item['title']] ?? false,
+                          saved: SavedBackend.isSaved(item['title']),
                           onSaveToggle: () => toggleSave(item['title']),
                         )),
                   ],

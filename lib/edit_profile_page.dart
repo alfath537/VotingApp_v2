@@ -13,7 +13,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _emailController =
       TextEditingController(text: 'nichi@mail.com');
 
-  // Placeholder foto profil
   String _profileImage = 'assets/images/imagespp.png';
 
   @override
@@ -97,16 +96,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   );
                   return;
                 }
-
-                // Simulasi penyimpanan data, bisa disambungkan ke Firebase
                 print("Updated Name: $name");
                 print("Updated Email: $email");
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Profile updated successfully.")),
                 );
-
-                // Kembali ke halaman sebelumnya
                 Navigator.pop(context);
               },
             ),

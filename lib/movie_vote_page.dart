@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 import 'movie_detail_page.dart';
 import 'widgets/movie_card.dart';
+import 'view_feedback_page.dart';
+
+class VoteBackend {
+  static final Map<String, int> _votes = {};
+
+  static void addVote(String movieTitle) {
+    _votes[movieTitle] = (_votes[movieTitle] ?? 0) + 1;
+  }
+
+  static Map<String, int> getVotes() => _votes;
+}
 
 class MovieVotePage extends StatelessWidget {
   const MovieVotePage({super.key});
@@ -21,6 +32,19 @@ class MovieVotePage extends StatelessWidget {
         title: const Text('Best Movie 2023'),
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.feedback),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ViewFeedbackPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [

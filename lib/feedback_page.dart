@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+class FeedbackBackend {
+  static final List<Map<String, dynamic>> _feedbacks = [];
+
+  static void addFeedback(String feedback, double rating) {
+    _feedbacks.add({
+      'feedback': feedback,
+      'rating': rating,
+      'timestamp': DateTime.now(),
+    });
+  }
+
+  static List<Map<String, dynamic>> getAllFeedbacks() => _feedbacks;
+}
+
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({super.key});
 
@@ -29,13 +43,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
     if (_formKey.currentState!.validate()) {
       final feedback = _feedbackController.text;
+      FeedbackBackend.addFeedback(feedback, _rating); 
       _showThankYouDialog(feedback);
     }
   }
 
   void _showThankYouDialog(String feedback) {
-    final currentRating = _rating; // Simpan rating saat ini
-
+    final currentRating = _rating;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -46,9 +60,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
             onPressed: () {
               Navigator.pop(context);
               _feedbackController.clear();
-              setState(() {
-                _rating = 0.0;
-              });
+              setState(() => _rating = 0.0);
             },
             child: const Text('OK'),
           ),
@@ -87,10 +99,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     color: Colors.amber,
                   ),
                   onRatingUpdate: (rating) {
-                    setState(() {
-                      _rating = rating;
-                    });
-                    debugPrint('Rating updated: $_rating');
+                    setState(() => _rating = rating);
                   },
                 ),
               ),

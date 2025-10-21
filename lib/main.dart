@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'theme_provider.dart';
-import 'splash_screen.dart'; 
+import 'splash_screen.dart';
+import 'firebase_options.dart'; 
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
@@ -31,7 +38,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blueGrey,
       ),
-      home: const SplashScreen(), // mulai dari splashscreen
+      home: const SplashScreen(),
     );
   }
 }
